@@ -20,8 +20,7 @@ bee listdb ✅
 
 ------------------------
 
-bee createtbl my_db_name tablename [column_name:type other_column_name:other_type]
-- Allow string, int, float, datetime ?
+bee createtbl my_db_name tablename [column_name:type other_column_name:other_type] 🟡
 
 bee deletetbl my_db_name tablename
 
