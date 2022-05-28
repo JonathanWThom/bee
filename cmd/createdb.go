@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Jonathan Thom <jonathanthom@hey.com>
 
 */
 package cmd
@@ -31,8 +31,7 @@ bee create db db-with-other-chars
 	Run: CreateDb,
 }
 
-const beePath = "/.bee"
-const badArgsError = "Must pass one name for database, for example: bee createdb my-great-database"
+const badArgsError = "Must pass one name for database. For example: bee createdb my-great-database"
 const createDbName = "createdb"
 const dbAlreadyExistsError = "Database already exists"
 const dbCreateError = "Error while creating database"
@@ -43,19 +42,10 @@ func CreateDb(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	homeDir, err := os.UserHomeDir()
+	beeDir, err := getBeeDir()
 	if err != nil {
 		fmt.Println(dbCreateError)
 		return
-	}
-
-	beeDir := fmt.Sprintf("%s/%s", homeDir, beePath)
-	if _, err := os.Stat(beeDir); errors.Is(err, os.ErrNotExist) {
-		err := os.Mkdir(beeDir, os.ModePerm)
-		if err != nil {
-			fmt.Println(dbCreateError)
-			return
-		}
 	}
 
 	dbName := args[0]
@@ -67,6 +57,8 @@ func CreateDb(cmd *cobra.Command, args []string) {
 		} else {
 			fmt.Println(dbCreateError)
 		}
+
+		return
 	}
 
 	fmt.Println(createDbName)

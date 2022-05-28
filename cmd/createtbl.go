@@ -20,9 +20,25 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("createtbl called")
-	},
+	Run: CreateTbl,
+}
+
+const badCreateTblArgs = "Must pass database and table name. For example: bee createtbl db-that-exists users"
+const createTblName = "createtbl"
+
+func CreateTbl(cmd *cobra.Command, args []string) {
+	if len(args) != 2 {
+		fmt.Println(badCreateTblArgs)
+		return
+	}
+
+	// db must exist
+
+	// table must not already exist
+
+	// parse rows in table
+
+	fmt.Println(createTblName)
 }
 
 func init() {
