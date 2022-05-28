@@ -21,6 +21,7 @@ bee listdb ✅
 ------------------------
 
 bee createtbl my_db_name tablename [column_name:type other_column_name:other_type] 🟡
+- Allowed types: int, float, string, bool
 
 bee deletetbl my_db_name tablename
 
