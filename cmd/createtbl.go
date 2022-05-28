@@ -25,10 +25,17 @@ to quickly create a Cobra application.`,
 
 const badCreateTblArgs = "Must pass database and table name. For example: bee createtbl db-that-exists users"
 const createTblName = "createtbl"
+const createTblError = "Error while creating table"
 
 func CreateTbl(cmd *cobra.Command, args []string) {
 	if len(args) != 2 {
 		fmt.Println(badCreateTblArgs)
+		return
+	}
+
+	beeDir, err := getBeerDir()
+	if err != nil {
+		fmt.Println(createTblError)
 		return
 	}
 
