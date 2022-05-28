@@ -6,35 +6,41 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	"github.com/spf13/cobra"
 )
 
 // listdbCmd represents the listdb command
 var listdbCmd = &cobra.Command{
-	Use:   "listdb",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Use:   listDbName,
+	Short: "Lists databases",
+	Run:   ListDb,
+}
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("listdb called")
-	},
+const listDbError = "Error while listing databases"
+const listDbName = "listdb"
+
+func ListDb(_cmd *cobra.Command, _args []string) {
+	beeDir, err := getBeeDir()
+	if err != nil {
+		fmt.Println(listDbError)
+		return
+	}
+
+	dbs, err := ioutil.ReadDir(beeDir)
+	if err != nil {
+		fmt.Println(listDbError)
+		return
+	}
+
+	for _, f := range dbs {
+		fmt.Println(f.Name())
+	}
+
+	fmt.Printf("\n%s\n", listDbName)
 }
 
 func init() {
-	rootCmd.AddCommand(listdbCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listdbCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listdbCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddCommand(listdbCmd) // nolint
 }
