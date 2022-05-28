@@ -22,11 +22,9 @@ bee createdb singulardb
 
 bee createdb createDBISCASEsensitive
 
-bee createdb db.with.dots
+bee createdb db.with-other-chars
 
 bee create db "db with spaces"
-
-bee create db db-with-other-chars
 `,
 	Run: CreateDb,
 }
@@ -36,7 +34,7 @@ const createDbName = "createdb"
 const dbAlreadyExistsError = "Database already exists"
 const dbCreateError = "Error while creating database"
 
-func CreateDb(cmd *cobra.Command, args []string) {
+func CreateDb(_cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
 		fmt.Println(badArgsError)
 		return

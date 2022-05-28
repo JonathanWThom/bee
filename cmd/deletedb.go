@@ -1,40 +1,75 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 Jonathan Thom <jonathanthom@hey.com>
 
 */
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
 
 // deletedbCmd represents the deletedb command
 var deletedbCmd = &cobra.Command{
-	Use:   "deletedb",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Use:   deleteDbName,
+	Short: "Deletes a database",
+	Long: `Deletes a database. Valid usages:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("deletedb called")
-	},
+bee deletedb my-db-to-delete-name
+
+bee deletedb caseSENSITIVEdb
+
+bee deletedb db.with-other-chars
+
+bee deletedb "db that has spaces"
+
+`,
+	Run: DeleteDb,
+}
+
+const badDeleteDbArgs = "Must pass one database to delete. For example: bee deletedb my-old-database"
+const dbNotExist = "Database does not exist"
+const deleteDbError = "Error while deleting database"
+const deleteDbName = "deletedb"
+
+func DeleteDb(_cmd *cobra.Command, args []string) {
+	// check args
+	if len(args) != 1 {
+		fmt.Println(badDeleteDbArgs)
+		return
+	}
+
+	beeDir, err := getBeeDir()
+	if err != nil {
+		fmt.Println(deleteDbError)
+		return
+	}
+
+	dbName := args[0]
+	dbDir := fmt.Sprintf("%s/%s", beeDir, dbName)
+	_, err = os.Stat(dbDir)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			fmt.Println(dbNotExist)
+			return
+		}
+
+		fmt.Println(deleteDbError)
+		return
+	}
+
+	err = os.Remove(dbDir)
+	if err != nil {
+		fmt.Println(deleteDbError)
+		return
+	}
+
+	fmt.Println(deleteDbName)
 }
 
 func init() {
-	rootCmd.AddCommand(deletedbCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// deletedbCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// deletedbCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddCommand(deletedbCmd) // nolint
 }

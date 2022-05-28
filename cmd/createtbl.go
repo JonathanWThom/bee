@@ -33,11 +33,13 @@ func CreateTbl(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	beeDir, err := getBeerDir()
+	beeDir, err := getBeeDir()
 	if err != nil {
 		fmt.Println(createTblError)
 		return
 	}
+
+	fmt.Println(beeDir)
 
 	// db must exist
 

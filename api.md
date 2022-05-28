@@ -10,9 +10,9 @@ Unless otherwise specified, order matters.
 
 ------------------------
 
-bee createdb my_db_name
+bee createdb my_db_name ✅
 
-bee deletedb my_db_name
+bee deletedb my_db_name ✅
 
 bee updatedb new_db_name
 
