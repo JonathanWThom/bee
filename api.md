@@ -14,7 +14,7 @@ bee createdb my_db_name ✅
 
 bee deletedb my_db_name ✅
 
-bee updatedb old_db_name new_db_name
+bee updatedb old_db_name new_db_name ✅
 
 bee listdb ✅
 

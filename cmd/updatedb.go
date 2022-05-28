@@ -1,40 +1,73 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
 
 // updatedbCmd represents the updatedb command
 var updatedbCmd = &cobra.Command{
-	Use:   "updatedb",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Use:   updateDbName,
+	Short: "Update the name of a database",
+	Long: `Update the name of a database. Valid usages:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("updatedb called")
-	},
+bee updatedb old_db_name new_db_name
+
+bee updatedb old_db_name new.db-name-with-chars
+
+be updatedb "old db name" "new db name"
+
+db updatedb caseSensitiveDB casesensitivedb
+`,
+	Run: UpdateDb,
+}
+
+const badUpdateDbArgs = `Must pass old database name and new database name.
+For example: bee updatedb old_db_name new_db_name
+
+Run bee updatedb --help for full instructions.`
+const updateDbError = "Error while updating database"
+const updateDbName = "updatedb"
+
+func UpdateDb(_cmd *cobra.Command, args []string) {
+	if len(args) != 2 {
+		fmt.Println(badUpdateDbArgs)
+		return
+	}
+
+	beeDir, err := getBeeDir()
+	if err != nil {
+		fmt.Println(updateDbError)
+		return
+	}
+
+	oldDbPath := args[0]
+	oldDbDir := fmt.Sprintf("%s/%s", beeDir, oldDbPath)
+	err = dirExists(oldDbDir, updateDbError)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	newDbPath := args[1]
+	newDbDir := fmt.Sprintf("%s/%s", beeDir, newDbPath)
+	err = os.Rename(oldDbDir, newDbDir)
+	if err != nil {
+		if errors.Is(err, os.ErrExist) {
+			fmt.Println(dbAlreadyExists)
+			return
+		}
+
+		fmt.Println(updateDbError)
+		return
+	}
+
+	fmt.Println(updateDbName)
 }
 
 func init() {
-	rootCmd.AddCommand(updatedbCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// updatedbCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// updatedbCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddCommand(updatedbCmd) //nolint
 }

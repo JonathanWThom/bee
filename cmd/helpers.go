@@ -7,6 +7,8 @@ import (
 )
 
 const beePath = "/.bee"
+const dbAlreadyExists = "Database already exists"
+const dbNotExist = "Database does not exist"
 
 func getBeeDir() (string, error) {
 	homeDir, err := os.UserHomeDir()
@@ -23,4 +25,17 @@ func getBeeDir() (string, error) {
 	}
 
 	return beeDir, nil
+}
+
+func dirExists(dir string, otherError string) error {
+	_, err := os.Stat(dir)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return errors.New(dbNotExist)
+		}
+
+		return errors.New(otherError)
+	}
+
+	return nil
 }

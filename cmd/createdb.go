@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 Jonathan Thom <jonathanthom@hey.com>
-
-*/
 package cmd
 
 import (
@@ -29,14 +25,16 @@ bee create db "db with spaces"
 	Run: CreateDb,
 }
 
-const badArgsError = "Must pass one name for database. For example: bee createdb my-great-database"
+const badCreateDbArgs = `Must pass one name for database.
+For example: bee createdb my-great-database
+
+Run bee createdb --help for full instructions.`
 const createDbName = "createdb"
-const dbAlreadyExistsError = "Database already exists"
 const dbCreateError = "Error while creating database"
 
 func CreateDb(_cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
-		fmt.Println(badArgsError)
+		fmt.Println(badCreateDbArgs)
 		return
 	}
 
@@ -51,7 +49,7 @@ func CreateDb(_cmd *cobra.Command, args []string) {
 	err = os.Mkdir(dbDir, os.ModePerm)
 	if err != nil {
 		if errors.Is(err, os.ErrExist) {
-			fmt.Println(dbAlreadyExistsError)
+			fmt.Println(dbAlreadyExists)
 		} else {
 			fmt.Println(dbCreateError)
 		}

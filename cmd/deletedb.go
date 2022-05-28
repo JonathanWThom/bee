@@ -1,11 +1,6 @@
-/*
-Copyright © 2022 Jonathan Thom <jonathanthom@hey.com>
-
-*/
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -30,8 +25,10 @@ bee deletedb "db that has spaces"
 	Run: DeleteDb,
 }
 
-const badDeleteDbArgs = "Must pass one database to delete. For example: bee deletedb my-old-database"
-const dbNotExist = "Database does not exist"
+const badDeleteDbArgs = `Must pass one database to delete.
+For example: bee deletedb my-old-database
+
+Run bee deletedb --help for full instructions.`
 const deleteDbError = "Error while deleting database"
 const deleteDbName = "deletedb"
 
@@ -50,14 +47,9 @@ func DeleteDb(_cmd *cobra.Command, args []string) {
 
 	dbName := args[0]
 	dbDir := fmt.Sprintf("%s/%s", beeDir, dbName)
-	_, err = os.Stat(dbDir)
+	err = dirExists(dbDir, deleteDbError)
 	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			fmt.Println(dbNotExist)
-			return
-		}
-
-		fmt.Println(deleteDbError)
+		fmt.Println(err)
 		return
 	}
 
