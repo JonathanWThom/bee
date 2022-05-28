@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// altertblCmd represents the altertbl command
-var altertblCmd = &cobra.Command{
-	Use:   "altertbl",
+// createcolCmd represents the createcol command
+var createcolCmd = &cobra.Command{
+	Use:   "createcol",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -21,20 +21,20 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("altertbl called")
+		fmt.Println("createcol called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(altertblCmd)
+	rootCmd.AddCommand(createcolCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// altertblCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// createcolCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// altertblCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// createcolCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
