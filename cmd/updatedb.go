@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -29,7 +27,6 @@ const badUpdateDbArgs = `Must pass old database name and new database name.
 For example: bee updatedb old_db_name new_db_name
 
 Run bee updatedb --help for full instructions.`
-const updateDbError = "Error while updating database"
 const updateDbName = "updatedb"
 
 func UpdateDb(_cmd *cobra.Command, args []string) {
@@ -38,30 +35,16 @@ func UpdateDb(_cmd *cobra.Command, args []string) {
 		return
 	}
 
-	beeDir, err := getBeeDir()
-	if err != nil {
-		fmt.Println(updateDbError)
-		return
-	}
-
-	oldDbPath := args[0]
-	oldDbDir := fmt.Sprintf("%s/%s", beeDir, oldDbPath)
-	err = dirExists(oldDbDir, updateDbError)
+	db, err := FindDatabase(args[0], updateDbError)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	newDbPath := args[1]
-	newDbDir := fmt.Sprintf("%s/%s", beeDir, newDbPath)
-	err = os.Rename(oldDbDir, newDbDir)
+	newDbName := args[1]
+	_, err = db.Rename(newDbName)
 	if err != nil {
-		if errors.Is(err, os.ErrExist) {
-			fmt.Println(dbAlreadyExists)
-			return
-		}
-
-		fmt.Println(updateDbError)
+		fmt.Println(err)
 		return
 	}
 

@@ -15,7 +15,7 @@ func getBeeDir() (string, error) {
 		return "", fmt.Errorf("error getting user homedir: %w", err)
 	}
 
-	beeDir := fmt.Sprintf("%s/%s", homeDir, beePath)
+	beeDir := fmt.Sprintf("%s%s", homeDir, beePath)
 	if _, err := os.Stat(beeDir); errors.Is(err, os.ErrNotExist) {
 		err := os.Mkdir(beeDir, os.ModePerm)
 		if err != nil {
@@ -40,15 +40,15 @@ func dirExists(dir, otherError string) error {
 }
 
 func includes[C comparable](slice []C, val C) bool {
-       for _, s := range slice {
-               if s == val {
-                       return true
-               }
-       }
+	for _, s := range slice {
+		if s == val {
+			return true
+		}
+	}
 
-       return false
+	return false
 }
 
 func remove[A any](slice []A, s int) []A {
-    return append(slice[:s], slice[s+1:]...)
+	return append(slice[:s], slice[s+1:]...)
 }

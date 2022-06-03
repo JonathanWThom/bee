@@ -8,7 +8,7 @@ type Column struct {
 }
 
 func (c Column) String() string {
-	return fmt.Sprintf("%s:%s", c.Name, c.Type)
+	return fmt.Sprintf("%s:%s\n", c.Name, c.Type)
 }
 
 func validType(typ string) bool {

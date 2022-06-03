@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 const dbCreateError = "Error while creating database"
 const dbAlreadyExists = "Database already exists"
 const removeTblError = "Error while deleting table"
+const updateDbError = "Error while updating database"
 
 type Database struct {
 	Dir    string
@@ -85,7 +87,7 @@ func (d *Database) HasTable(table Table) bool {
 }
 
 func (d *Database) RemoveTable(table Table) error {
-	if err := os.Remove(table.Dir); err != nil {
+	if err := os.RemoveAll(table.Dir); err != nil {
 		return errors.New(removeTblError)
 	}
 	for i, t := range d.Tables {
@@ -96,4 +98,22 @@ func (d *Database) RemoveTable(table Table) error {
 	}
 
 	return nil
+}
+
+func (d *Database) Rename(newName string) (*Database, error) {
+	splPath := strings.Split(d.Dir, "/")
+	newDir := fmt.Sprintf("%s/%s", strings.Join(splPath[:len(splPath)-1], "/"), newName)
+
+	err := os.Rename(d.Dir, newDir)
+
+	if err != nil {
+		if errors.Is(err, os.ErrExist) {
+			return nil, errors.New(dbAlreadyExists)
+		}
+
+		return nil, errors.New(updateDbError)
+	}
+	d.Dir = newDir
+
+	return d, nil
 }
