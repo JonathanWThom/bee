@@ -41,13 +41,13 @@ bee listcol my_db_name table_name
 
 ------------------------
 
-bee createrow my_db_name table_name [column_name:column_value] [other_column_name:other_column_value]
+bee createrow my_db_name table_name [column_name=column_value] [other_column_name=other_column_value]
 
-bee selectrow my_db_name table_name [column_name=is_value] [AND | OR] [other_column_name=is_other_value]
+bee selectrow my_db_name table_name [column_name IS value] [AND | OR] [other_column_name IS other_value]
 
-bee updaterow my_db_name table_name column_to_modify:new_value [column_name=is_value] [AND | OR ] [other_column_name=is_other_value]
+bee updaterow my_db_name table_name column_to_modify=new_value [column_name IS value] [AND | OR] [other_column_name IS other_value]
 
-bee deleterow my_db_name table_name [column_name=is_value] [AND | OR] [other_column_name=is_other_value]
+bee deleterow my_db_name table_name [column_name IS value] [AND | OR] [other_column_name IS other_value]
 
 ------------------------
 
