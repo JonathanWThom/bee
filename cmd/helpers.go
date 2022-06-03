@@ -7,7 +7,6 @@ import (
 )
 
 const beePath = "/.bee"
-const dbAlreadyExists = "Database already exists"
 const dbNotExist = "Database does not exist"
 
 func getBeeDir() (string, error) {
@@ -27,7 +26,7 @@ func getBeeDir() (string, error) {
 	return beeDir, nil
 }
 
-func dirExists(dir string, otherError string) error {
+func dirExists(dir, otherError string) error {
 	_, err := os.Stat(dir)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
@@ -38,4 +37,18 @@ func dirExists(dir string, otherError string) error {
 	}
 
 	return nil
+}
+
+func includes[C comparable](slice []C, val C) bool {
+       for _, s := range slice {
+               if s == val {
+                       return true
+               }
+       }
+
+       return false
+}
+
+func remove[A any](slice []A, s int) []A {
+    return append(slice[:s], slice[s+1:]...)
 }

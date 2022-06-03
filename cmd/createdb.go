@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -30,7 +28,6 @@ For example: bee createdb my-great-database
 
 Run bee createdb --help for full instructions.`
 const createDbName = "createdb"
-const dbCreateError = "Error while creating database"
 
 func CreateDb(_cmd *cobra.Command, args []string) {
 	if len(args) != 1 {
@@ -38,22 +35,10 @@ func CreateDb(_cmd *cobra.Command, args []string) {
 		return
 	}
 
-	beeDir, err := getBeeDir()
-	if err != nil {
-		fmt.Println(dbCreateError)
-		return
-	}
-
 	dbName := args[0]
-	dbDir := fmt.Sprintf("%s/%s", beeDir, dbName)
-	err = os.Mkdir(dbDir, os.ModePerm)
+	_, err := NewDatabase(dbName)
 	if err != nil {
-		if errors.Is(err, os.ErrExist) {
-			fmt.Println(dbAlreadyExists)
-		} else {
-			fmt.Println(dbCreateError)
-		}
-
+		fmt.Println(err)
 		return
 	}
 

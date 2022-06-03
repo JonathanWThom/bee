@@ -4,7 +4,7 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 */
 package main
 
-import "github.com/jonathanwthom/bee/bee/cmd"
+import "github.com/jonathanwthom/bee/cmd"
 
 func main() {
 	cmd.Execute()
