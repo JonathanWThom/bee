@@ -117,3 +117,12 @@ func (d *Database) Rename(newName string) (*Database, error) {
 
 	return d, nil
 }
+
+func (d *Database) DeleteTable(name) (*Database, error) {
+	// find table
+	// table.Delete
+	// check error
+	// remove from db field Tables
+
+	return d, nil
+}
