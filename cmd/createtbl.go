@@ -9,13 +9,15 @@ import (
 // createtblCmd represents the createtbl command
 var createtblCmd = &cobra.Command{
 	Use:   "createtbl",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Creates a new table on a database",
+	Long: `Creates a new table on a database. There are 4 valid types: int, float, string, and bool. Database must exist for command to work. Valid usages:
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+bee createtbl dbthatexists my_table
+
+bee createtbl dbthatexists my_table a_field:int
+
+bee createtbl dbthatexists my_table a_field:int another_field:string
+`,
 	Run: CreateTbl,
 }
 
