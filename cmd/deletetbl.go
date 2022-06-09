@@ -20,6 +20,7 @@ to quickly create a Cobra application.`,
 }
 
 const deleteTblName = "deletetbl"
+const deleteTblError = "Error while deleting table"
 
 func DeleteTbl(cmd *cobra.Command, args []string) {
 	if len(args) != 2 {
@@ -27,13 +28,13 @@ func DeleteTbl(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	db, error := FindDatabase(args[0])
+	db, err := FindDatabase(args[0], deleteTblError)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	_, err = db.DeleteTable(args[1])
+	_, err = db.DeleteTableByName(args[1])
 	if err != nil {
 		fmt.Println(err)
 		return

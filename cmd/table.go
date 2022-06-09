@@ -92,6 +92,6 @@ func (t *Table) WriteColumnToSchema(column *Column) error {
 	return nil
 }
 
-func (t *Table) Delete() error {
-	return t.Database.RemoveTable(*t)
+func (t *Table) Delete() (*Database, error) {
+	return t.Database.DeleteTable(*t)
 }

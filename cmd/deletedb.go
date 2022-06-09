@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -29,7 +28,6 @@ const badDeleteDbArgs = `Must pass one database to delete.
 For example: bee deletedb my-old-database
 
 Run bee deletedb --help for full instructions.`
-const deleteDbError = "Error while deleting database"
 const deleteDbName = "deletedb"
 
 func DeleteDb(_cmd *cobra.Command, args []string) {
@@ -39,23 +37,15 @@ func DeleteDb(_cmd *cobra.Command, args []string) {
 		return
 	}
 
-	beeDir, err := getBeeDir()
-	if err != nil {
-		fmt.Println(deleteDbError)
-		return
-	}
-
-	dbName := args[0]
-	dbDir := fmt.Sprintf("%s/%s", beeDir, dbName)
-	err = dirExists(dbDir, deleteDbError)
+	db, err := FindDatabase(args[0], deleteDbError)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	err = os.Remove(dbDir)
+	err = db.Delete()
 	if err != nil {
-		fmt.Println(deleteDbError)
+		fmt.Println(err)
 		return
 	}
 

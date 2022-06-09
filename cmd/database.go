@@ -10,6 +10,7 @@ import (
 
 const dbCreateError = "Error while creating database"
 const dbAlreadyExists = "Database already exists"
+const deleteDbError = "Error while deleting database"
 const removeTblError = "Error while deleting table"
 const updateDbError = "Error while updating database"
 
@@ -68,6 +69,9 @@ func FindDatabase(name, findDbError string) (*Database, error) {
 func (d *Database) CreateTable(name string) (*Table, error) {
 	table, err := NewTable(d, name)
 	if err != nil {
+		if err.Error() != tblAlreadyExist {
+			d.DeleteTableByName(name)
+		}
 		return nil, err
 	}
 
@@ -86,18 +90,27 @@ func (d *Database) HasTable(table Table) bool {
 	return false
 }
 
-func (d *Database) RemoveTable(table Table) error {
+func (d *Database) DeleteTableByName(name string) (*Database, error) {
+	table := Table{Dir: fmt.Sprintf("%s/%s", d.Dir, name)}
+	if !d.HasTable(table) {
+		return d, errors.New(removeTblError)
+	}
+
+	return d.DeleteTable(table)
+}
+
+func (d *Database) DeleteTable(table Table) (*Database, error) {
 	if err := os.RemoveAll(table.Dir); err != nil {
-		return errors.New(removeTblError)
+		return d, errors.New(removeTblError)
 	}
 	for i, t := range d.Tables {
 		if t.Dir == table.Dir {
 			d.Tables = remove(d.Tables, i)
-			return nil
+			return d, nil
 		}
 	}
 
-	return nil
+	return d, nil
 }
 
 func (d *Database) Rename(newName string) (*Database, error) {
@@ -118,11 +131,10 @@ func (d *Database) Rename(newName string) (*Database, error) {
 	return d, nil
 }
 
-func (d *Database) DeleteTable(name) (*Database, error) {
-	// find table
-	// table.Delete
-	// check error
-	// remove from db field Tables
+func (d *Database) Delete() error {
+	if err := os.RemoveAll(d.Dir); err != nil {
+		return errors.New(deleteDbError)
+	}
 
-	return d, nil
+	return nil
 }
