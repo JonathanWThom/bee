@@ -19,12 +19,16 @@ to quickly create a Cobra application.`,
 	Run: DeleteTbl,
 }
 
+const badDeleteTblArgs = `Must pass database and table name, and optionally pass columns.
+For example: bee deletetbl db-that-exists tbl-that-exists
+
+Run bee createtbl --help for full instructions.`
 const deleteTblName = "deletetbl"
 const deleteTblError = "Error while deleting table"
 
 func DeleteTbl(cmd *cobra.Command, args []string) {
 	if len(args) != 2 {
-		fmt.Println("invalid args") // make const and descriptive
+		fmt.Println(badDeleteTblArgs)
 		return
 	}
 
