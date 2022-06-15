@@ -1,12 +1,6 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -20,9 +14,15 @@ and usage of using your command. For example:
 Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("updatetbl called")
-	},
+	Run: UpdateTbl,
+}
+
+func UpdateTbl(cmd *cobra.Command, args []string) {
+	// check args
+	// make sure name doesn't already exist
+	// find db
+	// get table from db
+
 }
 
 func init() {

@@ -10,6 +10,7 @@ import (
 
 const tblAlreadyExist = "Table already exists"
 const createTblError = "Error while creating table"
+const updateTblError = "Error while updating table"
 
 type Table struct {
 	Database   Database
@@ -94,4 +95,15 @@ func (t *Table) WriteColumnToSchema(column *Column) error {
 
 func (t *Table) Delete() (*Database, error) {
 	return t.Database.DeleteTable(*t)
+}
+
+func (t *Table) Update(newName string) (*table, error) {
+	newDir := fmt.Sprintf("%s/%s", t.Database.Dir, newName)
+	if err := os.Rename(t.Dir, newDir); err != nil {
+		fmt.Println(err) // remove me
+		return nil, errors.New(updateTblError)
+	}
+
+	// update in db too?
+	return table, nil
 }
