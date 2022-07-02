@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -17,24 +19,30 @@ to quickly create a Cobra application.`,
 	Run: UpdateTbl,
 }
 
+const badUpdateTblArgs = `Must pass database name, old table name, and new table name.
+For example: bee updatetbl db_name old_tbl_name new_tbl_name
+
+Run bee updatetbl --help for full instructions.`
+
+// UpdateTbl check to make sure there are 2 arguments
+// check that name doens't already exist
+// find the db
+// get the table from the db
 func UpdateTbl(cmd *cobra.Command, args []string) {
-	// check args
-	// make sure name doesn't already exist
-	// find db
-	// get table from db
+	if len(args) != 3 {
+		fmt.Println(badUpdateTblArgs)
+		return
+	}
+
+	dbName := args[0]
+	db, err := FindDatabase(dbName, updateTblError)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 }
 
 func init() {
 	rootCmd.AddCommand(updatetblCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// updatetblCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// updatetblCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

@@ -100,7 +100,6 @@ func (t *Table) Delete() (*Database, error) {
 func (t *Table) Update(newName string) (*table, error) {
 	newDir := fmt.Sprintf("%s/%s", t.Database.Dir, newName)
 	if err := os.Rename(t.Dir, newDir); err != nil {
-		fmt.Println(err) // remove me
 		return nil, errors.New(updateTblError)
 	}
 
